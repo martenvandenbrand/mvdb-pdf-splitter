@@ -1,0 +1,1 @@
+Drop PDF files into this directory. On the next push (or when you trigger the workflow manually), each PDF will be split into one PDF per page, written to `output/<pdf-name>/`, and uploaded as a workflow artifact.

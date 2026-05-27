@@ -1,0 +1,58 @@
+name: Split PDFs
+
+on:
+  # Run automatically when PDFs are added or changed in input/
+  push:
+    paths:
+      - 'input/**.pdf'
+      - 'scripts/split_pdf.py'
+      - '.github/workflows/split-pdfs.yml'
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+  # Allow other workflows to call this one
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Split PDFs
+        run: python scripts/split_pdf.py --input-dir input --output-dir output
+
+      - name: Upload split pages as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: split-pages
+          path: output/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit split pages back to the repo
+        # Only commit on pushes to the default branch, not on manual runs
+        if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: split PDFs into pages [skip ci]"
+            git push
+          fi
