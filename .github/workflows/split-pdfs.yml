@@ -6,6 +6,7 @@ on:
     paths:
       - 'input/**.pdf'
       - 'scripts/split_pdf.py'
+      - 'split-config.json'
       - '.github/workflows/split-pdfs.yml'
   # Allow manual runs from the Actions tab
   workflow_dispatch:
@@ -33,7 +34,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Split PDFs
-        run: python scripts/split_pdf.py --input-dir input --output-dir output
+        run: python scripts/split_pdf.py --input-dir input --output-dir output --config split-config.json
 
       - name: Upload split pages as workflow artifact
         uses: actions/upload-artifact@v4
