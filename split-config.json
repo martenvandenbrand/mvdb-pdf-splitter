@@ -1,4 +1,4 @@
 {
   "_comment": "Map PDF filenames to comma-separated 1-based page ranges, e.g. '1-7,8-10,11-27'. Use '*' as a default for files not listed. Remove an entry (or the whole file) to fall back to one-file-per-page splitting.",
-  "*": "12-14,14-19,19-23,23-27,27-46,46-48,48-57,57-63,63-229"
+  "*": "12-14,14-16,16-18,18-21,21-27,27-38,38-107,110-112,112-119,119-121,121-122,122-130,130-132,132-150,150-181,182-184,184-187,187-188,188-188,188-193,193-195,195-198,198-222"
 }
